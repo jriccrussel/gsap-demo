@@ -14,6 +14,17 @@ function initNavigation(){
             }, 300)
         })
     })
+
+    // hamburger move right when scrolled
+    // logo opacity 0 when scrolled
+    ScrollTrigger.create({
+        start: 100,
+        toggleClass: {
+            targets: 'body',
+            className: 'has-scrolled'
+        },
+        markers: false
+    })
     
 }
 
