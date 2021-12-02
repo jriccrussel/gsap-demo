@@ -15,14 +15,26 @@ function initNavigation(){
         })
     })
 
-    // hamburger move right when scrolled
-    // logo opacity 0 when scrolled
+    // Nav Links Animation Function moves down after scrolling
+    function navAnimation(){
+        return gsap.to(mainNavLinks, {
+            duration: 1,
+            stagger: 0.5,
+            autoAlpha: 0,
+            y: 20
+        })
+    }
+
+    // hamburger move right after scrolled ==> 'has-scrolled'
+    // logo opacity 0 after scrolled ==> 'has-scrolled'
+    // Nav Links moves down after scrolling ==> 'onEnter: () => navAnimation()'
     ScrollTrigger.create({
         start: 100,
         toggleClass: {
             targets: 'body',
             className: 'has-scrolled'
         },
+        onEnter: () => navAnimation(),
         markers: false
     })
     
