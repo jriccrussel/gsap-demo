@@ -1,5 +1,6 @@
 gsap.registerPlugin(ScrollTrigger);
 
+// Navigation Animaation
 function initNavigation(){
 
     const mainNavLinks = gsap.utils.toArray('.main-nav a'); // navigation links || animation fade move from left to right
@@ -48,12 +49,26 @@ function initNavigation(){
         markers: false
     })
     
-};
+}
+
+// Header Animation
+function initHeaderTilt(){
+    document.querySelector('header').addEventListener('mousemove', moveImages);
+
+}
+
+function moveImages(e){
+    const {offsetX, offsetY, target} = e;
+    const {clientWidth, clientHeight} = target;
+
+    console.log(offsetX, offsetY,clientWidth, clientHeight);
+}
 
 function init(){    
     // Calling the function to run
     initNavigation();
-};
+    initHeaderTilt();
+}
 
 window.addEventListener('load', function(){
     init(); 
