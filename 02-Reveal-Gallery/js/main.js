@@ -74,13 +74,42 @@ function createHoverReveal(e){
     return tl;
 }
 
-function init(){
+// function init(){
     
-    // start here
-    initHoverReveal();
+//     // start here
+//     initHoverReveal();
+
+// }
+
+// window.addEventListener('load', function(){
+//     init();
+// });
+
+// MOBILE
+// define breakpoint
+const mq = window.matchMedia("(min-width: 768px)");
+
+// add change listener on to this breakpoint
+mq.addListener(handleWidthChange);
+
+
+//  first page load
+handleWidthChange(mq);
+
+// media query change
+function handleWidthChange(mq){
+    // console.log(mq);
+    // check if we are on the right breakpoint
+    if(mq.matches){
+
+        // setup hover animation
+        initHoverReveal();
+
+    } else {
+
+        // width is less than 768px
+        console.log('we are on mobile');
+        
+    }
 
 }
-
-window.addEventListener('load', function(){
-    init();
-});
