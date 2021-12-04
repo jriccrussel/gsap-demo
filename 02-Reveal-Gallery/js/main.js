@@ -108,8 +108,11 @@ function handleWidthChange(mq){
     } else {
 
         // width is less than 768px
-        console.log('we are on mobile');
+        console.log('we are on mobile')
         
     }
 
 }
+
+
+
