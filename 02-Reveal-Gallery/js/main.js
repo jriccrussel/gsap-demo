@@ -87,14 +87,28 @@ function createHoverReveal(e){
 
 // MOBILE
 // define breakpoint
-const mq = window.matchMedia("(min-width: 768px)");
-
-// add change listener on to this breakpoint
-mq.addListener(handleWidthChange);
-
+const mq = window.matchMedia("(min-width: 768px)"); // if window matches sa min-width 768px
 
 //  first page load
 handleWidthChange(mq);
+
+// add change listener on to this breakpoint
+// mq.addListener(handleWidthChange);
+mq.addEventListener('change', handleWidthChange);
+
+// reset all props
+function resetProps(elements){
+    console.log(elements);
+
+    // stop all tweens
+    gsap.killTweensOf()
+
+    if(elements.length){
+        elements.forEach((el) => {
+            el && gsap.set(el, { clearProps: "all" })
+        })
+    }
+}
 
 // media query change
 function handleWidthChange(mq){
@@ -108,8 +122,16 @@ function handleWidthChange(mq){
     } else {
 
         // width is less than 768px
-        console.log('we are on mobile')
-        
+        console.log('we are on mobile');
+
+        // remove event listenter in mobile
+        sections.forEach(section => {
+            section.addEventListener('mouseenter', createHoverReveal);
+            section.addEventListener('mouseleave', createHoverReveal);
+
+            const { imageBlock, mask, text, textCopy, textMask, textP, image } = section;
+            resetProps([imageBlock, mask, text, textCopy, textMask, textP, image]);
+        });
     }
 
 }
