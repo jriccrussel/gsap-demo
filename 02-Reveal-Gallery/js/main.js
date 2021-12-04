@@ -14,6 +14,9 @@ function initHoverReveal() {
         // To access 'section.mask, section.imageBlock' to 'createHoverReveal(e)' we need to destructure it and define it as 'e.target' ==> 'const {imageBlock, mask} = e.target;'
         section.imageBlock = section.querySelector('.rg__image');
         section.mask = section.querySelector('.rg__image--mask');
+        section.text = section.querySelector('.rg__text');
+        section.textHeight = section.querySelector('.rg__text--copy').clientHeight;
+        section.textCopy = section.querySelector('.rg__text--copy');
 
         // reset the initial position
         // gsap.set(imageBlock, {yPercent: -101});
@@ -28,12 +31,16 @@ function initHoverReveal() {
     })
 }
 
+function getTextHeight(elem){
+    return elem.clientHeight;
+}
+
 function createHoverReveal(e){
     // console.log(e);
     // console.log(e.type);
     
     // console.log(e.target);
-    const {imageBlock, mask} = e.target;
+    const {imageBlock, mask, text, textHeight, textCopy} = e.target;
     // why 'e.target' remember it was pass from 'const sections'(parent) && then we forEach to gain access sulod sa 'sections', basically 'sections' was the target therefore we gain access sa iyang properties which has 'section.imageBlock, section.mask'
     // console.log(imageBlock, mask);
 
@@ -46,12 +53,17 @@ function createHoverReveal(e){
 
     if (e.type === 'mouseenter'){
         
-        tl.to([mask, imageBlock], {yPercent:0});
+        tl
+        .to([mask, imageBlock], {yPercent:0})
+            // .to(text, {y: -textHeight / 2})
+            // .to(text, {y: () => -getTextHeight(textCopy) / 2})
+            .to(text, {y: () => -textCopy.clientHeight / 2})
         
     } else if (e.type === 'mouseleave'){
 
         tl.to(mask, {yPercent: 100})
-            .to(imageBlock, {yPercent: -101}, 0);
+            .to(imageBlock, {yPercent: -101}, 0)
+            .to(text, {y:0})
 
     }
 
