@@ -11,9 +11,11 @@ function initPortfolioHover() {
     allLinks.forEach(link => {
         link.addEventListener('mouseenter', createPortfolioHover);
         link.addEventListener('mouseleave', createPortfolioHover);
+        link.addEventListener('mousemove', createPortfolioMove);
     });
 }
 
+// HOver
 function createPortfolioHover(e){
     if(e.type === 'mouseenter'){
 
@@ -50,6 +52,34 @@ function createPortfolioHover(e){
         .to(pageBackground, { backgroundColor: '#ACB7AB', ease: 'none' }, 0)
 
     }
+}
+
+// When Hovered Image move
+function createPortfolioMove(e){
+
+    const { clientY } = e;
+
+    // move large image
+    gsap.to(largeImage, {
+        duration: 1.2,
+        // y: -(document.querySelector('.portfolio__categories').clientHeight - clientY) / 6,
+        y: getPortfolioOffset(clientY) / 6,
+        ease: 'Power3.inOut'
+    })
+
+    // move small image
+    gsap.to(smallImage, {
+        duration: 1.2,
+        // y: -(document.querySelector('.portfolio__categories').clientHeight - clientY) / 3,
+        y: getPortfolioOffset(clientY) / 3,
+        ease: 'Power3.inOut'
+    })
+
+}
+
+
+function getPortfolioOffset(clientY) {
+    return -(document.querySelector('.portfolio__categories').clientHeight - clientY);
 }
 
 function init(){
