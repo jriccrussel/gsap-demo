@@ -43,6 +43,11 @@ function createPortfolioHover(e){
         // fade out images
         // all links back to black
         // change background color back to default #ACB7AB
+        const tl = gsap.timeline();
+
+        tl.to([largeImage, smallImage], { autoAlpha: 0 })
+        .to(allLinks, {color: '#000000', autoAlpha: 1 }, 0)
+        .to(pageBackground, { backgroundColor: '#ACB7AB', ease: 'none' }, 0)
 
     }
 }
