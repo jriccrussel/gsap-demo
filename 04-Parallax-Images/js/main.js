@@ -48,7 +48,7 @@ function initPinSteps(){
     }
 
     gsap.utils.toArray('.stage').forEach((stage, index) => {
-
+        
         // NAVIGATION LINKS
         const navLinks = gsap.utils.toArray('.fixed-nav li');
 
