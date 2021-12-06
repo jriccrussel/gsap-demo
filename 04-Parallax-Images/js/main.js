@@ -36,6 +36,39 @@ function initPinSteps(){
         markers: true
     });
 
+    // get true hieght even sa mobile
+    const getVh = () => {
+        const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+        return vh;
+    };
+
+    const updateBodyColor = (color) => {
+        // gsap.to('.fill-background', { backgroundColor: color, ease: 'none' }); // gsap method
+        document.documentElement.style.setProperty('--bcg-fill-color', color); // js method
+    }
+
+    gsap.utils.toArray('.stage').forEach((stage, index) => {
+
+        // NAVIGATION LINKS
+        const navLinks = gsap.utils.toArray('.fixed-nav li');
+
+        ScrollTrigger.create({
+            trigger: stage,
+            start: 'top center',
+            //end: `+=${stage.clientHeight}`, // very end sa section || in mobile mag overlap cya
+            end: () => `+=${stage.clientHeight+getVh()/10}`, // can find the true height even sa mobile
+            toggleClass: { // nav links will set to active base sa section
+                targets: navLinks[index],
+                className: 'is-active'
+            },
+            // markers: true,
+            onEnter: () => updateBodyColor(stage.dataset.color),
+            onEnterBack: () => updateBodyColor(stage.dataset.color),
+        });
+
+
+    });
+
 }
 
 function init(){
