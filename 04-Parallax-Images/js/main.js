@@ -17,7 +17,7 @@ function initImageParallax(){
                 trigger: section,
                 start: 'top bottom',
                 // scrub: true,
-                crub: 1,
+                scrub: 1,
                 // markers: true
             }
         });
@@ -131,6 +131,6 @@ gsap.to(container, {
         // scrub: 3,
         scrub: 1,
         invalidateOnRefresh: true,
-        // markers: true
+        markers: true
     }
 })
