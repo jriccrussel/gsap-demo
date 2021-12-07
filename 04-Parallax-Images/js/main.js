@@ -33,7 +33,7 @@ function initPinSteps(){
         endTrigger: '#stage4',
         end: 'center center',
         pin: true,
-        markers: true
+        // markers: true
     });
 
     // get true hieght even sa mobile
@@ -71,11 +71,30 @@ function initPinSteps(){
 
 }
 
+// SCROLL TO SECTION
+function initScrollTo(){
+    
+    // find all links and animate to the right position
+    gsap.utils.toArray('.fixed-nav a').forEach(link => {
+
+        // target anchor links
+        const target = link.getAttribute('href');
+
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            gsap.to(window, {duration: 1.5, scrollTo: target, ease: 'Power2.out'});
+        })
+
+    })
+
+}
+
 function init(){
     
     // start here
     initImageParallax();
     initPinSteps();
+    initScrollTo();
 
 }
 
