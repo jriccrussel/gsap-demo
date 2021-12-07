@@ -16,7 +16,8 @@ function initImageParallax(){
             scrollTrigger: {
                 trigger: section,
                 start: 'top bottom',
-                scrub: true,
+                // scrub: true,
+                crub: 1,
                 // markers: true
             }
         });
@@ -33,7 +34,8 @@ function initPinSteps(){
         endTrigger: '#stage4',
         end: 'center center',
         pin: true,
-        // markers: true
+        // markers: true,
+        pinReparent: true
     });
 
     // get true hieght even sa mobile
@@ -117,3 +119,18 @@ function setHeight(){
     document.body.style.height = `${height}px`;
 }
 ScrollTrigger.addEventListener('refreshInit', setHeight);
+
+gsap.to(container, {
+    y: () => -(height - document.documentElement.clientHeight),
+    // ease: 'Power2.out',
+    ease: 'none',
+    scrollTrigger: {
+        trigger: document.body,
+        start: 'top top',
+        end: 'bottom bottom',
+        // scrub: 3,
+        scrub: 1,
+        invalidateOnRefresh: true,
+        // markers: true
+    }
+})
