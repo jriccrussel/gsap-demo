@@ -1,5 +1,7 @@
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
+let bodyScrollBar;
+
 function initImageParallax() {
     
     // select all sections .with-parallax
@@ -18,10 +20,8 @@ function initImageParallax() {
                 scrub: true
             }
         });
-
     });
-
-}
+};
 
 function initPinSteps() {
     
@@ -30,7 +30,8 @@ function initPinSteps() {
         start: 'top center',
         endTrigger: '#stage4',
         end: 'center center',
-        pin: true
+        pin: true,
+        pinReparent: true
     });
 
     const getVh = () => {
@@ -58,10 +59,8 @@ function initPinSteps() {
             onEnter: () => updateBodyColor(stage.dataset.color),
             onEnterBack: () => updateBodyColor(stage.dataset.color),
         });
-
     });
-
-}
+};
 
 function initScrollTo(){
 
@@ -72,15 +71,40 @@ function initScrollTo(){
 
         link.addEventListener('click', (e) => {
             e.preventDefault();
-            gsap.to(window, {duration: 1.5, scrollTo: target, ease: 'Power2.out'});
+            // gsap.to(window, {duration: 1.5, scrollTo: target, ease: 'Power2.out'});
+            bodyScrollBar.scrollIntoView(document.querySelector(target), {damping: 0.07, offsetTop: 100})
         });
 
     });
 
+};
+
+function initSmoothScrollbar(){
+     
+    // Smooth Scrollbar
+    // Scrollbar.init(document.querySelector('#viewport'));
+    bodyScrollBar = Scrollbar.init(document.querySelector('#viewport'), {damping: 0.07});
+
+    // removehorizontal scrollbar
+    bodyScrollBar.track.xAxis.element.remove();
+
+    // keep ScrollTrigger in sync with Smooth Scrollbar
+    ScrollTrigger.scrollerProxy(document.body, {
+        scrollTop(value) {
+            if (arguments.length) {
+                bodyScrollBar.scrollTop = value; // setter
+            }
+            return bodyScrollBar.scrollTop;    // getter
+        }
+    });
+    
+    // when the smooth scroller updates, tell ScrollTrigger to update() too: 
+    bodyScrollBar.addListener(ScrollTrigger.update);
 }
 
 function init(){
-    
+
+    initSmoothScrollbar();    
     initImageParallax();
     initPinSteps();
     initScrollTo();
