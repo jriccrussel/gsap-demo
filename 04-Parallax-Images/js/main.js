@@ -101,3 +101,19 @@ function init(){
 window.addEventListener('load', function(){
     init();
 });
+
+// GSAP SMOOTH SCROLLING
+window.addEventListener('load', function(){
+    init();
+});
+
+let container = document.querySelector('#scroll-container');
+// document.body.style.height = container.clientHeight + "px";
+// document.body.style.height = `${container.clientHeight}px`;
+
+let height;
+function setHeight(){
+    height = container.clientHeight;
+    document.body.style.height = `${height}px`;
+}
+ScrollTrigger.addEventListener('refreshInit', setHeight);
