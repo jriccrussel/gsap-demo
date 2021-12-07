@@ -16,12 +16,11 @@ function initImageParallax(){
             scrollTrigger: {
                 trigger: section,
                 start: 'top bottom',
-                // scrub: true,
-                scrub: 1,
+                scrub: true,
+                // scrub: 1,
                 // markers: true
             }
         });
-
     });
 }
 
@@ -35,7 +34,7 @@ function initPinSteps(){
         end: 'center center',
         pin: true,
         // markers: true,
-        pinReparent: true
+        // pinReparent: true
     });
 
     // get true hieght even sa mobile
@@ -67,10 +66,7 @@ function initPinSteps(){
             onEnter: () => updateBodyColor(stage.dataset.color),
             onEnterBack: () => updateBodyColor(stage.dataset.color),
         });
-
-
     });
-
 }
 
 // SCROLL TO SECTION
@@ -85,52 +81,48 @@ function initScrollTo(){
         link.addEventListener('click', (e) => {
             e.preventDefault();
             gsap.to(window, {duration: 1.5, scrollTo: target, ease: 'Power2.out'});
-        })
-
-    })
-
+        });
+    });
 }
 
-function init(){
-    
+function init(){    
     // start here
     initImageParallax();
     initPinSteps();
     initScrollTo();
-
 }
 
 window.addEventListener('load', function(){
     init();
 });
 
-// GSAP SMOOTH SCROLLING
-window.addEventListener('load', function(){
-    init();
-});
+// // GSAP SMOOTH SCROLLING
+// window.addEventListener('load', function(){
+//     init();
+// });
 
-let container = document.querySelector('#scroll-container');
-// document.body.style.height = container.clientHeight + "px";
-// document.body.style.height = `${container.clientHeight}px`;
+// let container = document.querySelector('#scroll-container');
+// // document.body.style.height = container.clientHeight + "px";
+// // document.body.style.height = `${container.clientHeight}px`;
 
-let height;
-function setHeight(){
-    height = container.clientHeight;
-    document.body.style.height = `${height}px`;
-}
-ScrollTrigger.addEventListener('refreshInit', setHeight);
+// let height;
+// function setHeight(){
+//     height = container.clientHeight;
+//     document.body.style.height = `${height}px`;
+// }
+// ScrollTrigger.addEventListener('refreshInit', setHeight);
 
-gsap.to(container, {
-    y: () => -(height - document.documentElement.clientHeight),
-    // ease: 'Power2.out',
-    ease: 'none',
-    scrollTrigger: {
-        trigger: document.body,
-        start: 'top top',
-        end: 'bottom bottom',
-        // scrub: 3,
-        scrub: 1,
-        invalidateOnRefresh: true,
-        markers: true
-    }
-})
+// gsap.to(container, {
+//     y: () => -(height - document.documentElement.clientHeight),
+//     // ease: 'Power2.out',
+//     ease: 'none',
+//     scrollTrigger: {
+//         trigger: document.body,
+//         start: 'top top',
+//         end: 'bottom bottom',
+//         // scrub: 3,
+//         scrub: 1,
+//         invalidateOnRefresh: true,
+//         markers: true
+//     }
+// })
