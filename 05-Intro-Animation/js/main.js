@@ -16,48 +16,49 @@ gsap.set(loaderInner, {scaleY: 0.005, transformOrigin: 'bottom'});
 
 // make a tween that scales the loader 
 // then ang progress bar(sa sulod mura dark blue) mo animate to the right
-const progressTween = gsap.to(progressBar, {paused: true, scaleX: 0, ease: 'none', transformOrigin: 'right'});
+gsap.to(progressBar, {scaleX: 0, ease: 'none', transformOrigin: 'right'});
+// const progressTween = gsap.to(progressBar, {paused: true, scaleX: 0, ease: 'none', transformOrigin: 'right'});
 
-// setup variables
-// https://codepen.io/desandro/pen/hlzaw
-let loadedImageCount = 0, imageCount;
-const container = select('#main');
+// // setup variables
+// // https://codepen.io/desandro/pen/hlzaw
+// let loadedImageCount = 0, imageCount;
+// const container = select('#main');
 
-// setup Images loaded
-const imgLoad = imagesLoaded( container );
-imageCount = imgLoad.images.length;
+// // setup Images loaded
+// const imgLoad = imagesLoaded( container );
+// imageCount = imgLoad.images.length;
 
-// set the initial progress to 0
-updateProgress(0);
+// // set the initial progress to 0
+// updateProgress(0);
 
-// triggered after each item is loaded
-imgLoad.on( 'progress', function() {
-    // increase the number of loaded images
-    loadedImageCount++;
-    // update progress
-    updateProgress( loadedImageCount );
-});
+// // triggered after each item is loaded
+// imgLoad.on( 'progress', function() {
+//     // increase the number of loaded images
+//     loadedImageCount++;
+//     // update progress
+//     updateProgress( loadedImageCount );
+// });
 
-// update the progress of our progressBar tween
-// progress bar will show base on the size of the image in the loader
-function updateProgress( value ) { 
-    // console.log(value/imageCount)
-    // tween progress bar tween to the right value
-    gsap.to(progressTween, {
-        progress: value/imageCount,
-        duration: 0.3,
-        ease: 'power1.out'
-    })
-}
+// // update the progress of our progressBar tween
+// // progress bar will show base on the size of the image in the loader
+// function updateProgress( value ) { 
+//     // console.log(value/imageCount)
+//     // tween progress bar tween to the right value
+//     gsap.to(progressTween, {
+//         progress: value/imageCount,
+//         duration: 0.3,
+//         ease: 'power1.out'
+//     })
+// }
 
-// do whatever you want when all images are loaded
-imgLoad.on( 'done', function( instance ) {
-    // we will simply init our loader animation onComplete
-    gsap.set(progressBar, {
-        autoAlpha: 0,
-        onComplete: initLoader
-    });
-});
+// // do whatever you want when all images are loaded
+// imgLoad.on( 'done', function( instance ) {
+//     // we will simply init our loader animation onComplete
+//     gsap.set(progressBar, {
+//         autoAlpha: 0,
+//         onComplete: initLoader
+//     });
+// });
 
 // Loader   
 function initLoader(){
@@ -82,11 +83,15 @@ function initLoader(){
 
     tlLoaderIn
     .set(loaderContent, {autoAlpha: 1})
-    .to(loaderInner, {
-        scaleY: 1,
-        transformOrigin: 'bottom',
-        ease: 'power1.inOut'
+    .from(loaderInner, {
+        scaleY: 0,
+        transformOrigin: 'bottom'
     }).addLabel('revealImage')
+    // .to(loaderInner, {
+    //     scaleY: 1,
+    //     transformOrigin: 'bottom',
+    //     ease: 'power1.inOut'
+    // }).addLabel('revealImage')
     .from(mask, {yPercent: 100}, 'revealImage-=0.6')  
     .from(image, {yPercent: 100}, 'revealImage-=0.6')
     .from([line1, line2], {yPercent: 100, stagger: 0.1}, 'revealImage-=0.4');
@@ -116,12 +121,12 @@ function initLoader(){
 
 }
 
-// function init(){
+function init(){
     
-//     // start here
-//     initLoader();
-// }
+    // start here
+    initLoader();
+}
 
-// window.addEventListener('load', function(){
-//     init();
-// });
+window.addEventListener('load', function(){
+    init();
+});
