@@ -3,58 +3,53 @@ gsap.registerPlugin(ScrollTrigger);
 // Navigation Animaation
 function initNavigation(){
 
-    const mainNavLinks = gsap.utils.toArray('.main-nav a'); // navigation links || animation fade move from left to right
-    const mainNavLinksRev = gsap.utils.toArray('.main-nav a').reverse(); // navigation links || animation move from right to left
+    const mainNavLinks = gsap.utils.toArray('.main-nav a');
+    const mainNavLinksRev = gsap.utils.toArray('.main-nav a').reverse();
 
-    // Hover class animate
     mainNavLinks.forEach(link => {
         link.addEventListener('mouseleave', e => {
-            link.classList.add('animate-out'); // when ang link(navigation link) is hovered then run class animate
 
-            setTimeout(() => {
-                link.classList.remove('animate-out') // if dili cya hovered(navigation link) then remove class animate
-            }, 300);
+            // add class
+            link.classList.add('animate-out');
+
         });
-    })
+        link.ontransitionend = function() {
+            //remove class
+            link.classList.remove('animate-out');
+        }
+    });
 
-    // Nav Links Animation Function moves down after scrolling
-    function navAnimation({direction}){
-        const scrollingDown = direction === 1; // scrolled down
-        const links = scrollingDown ? mainNavLinks : mainNavLinksRev
-
-        //return gsap.to(mainNavLinks, { 
-        return gsap.to(links, { 
-            duration: 0.3,
-            stagger: 0.05,
-            // autoAlpha: 0,
-            autoAlpha: () => scrollingDown ? 0 : 1, // '0'- after scroll hide || '1' = after scroll top show 
-            // y: 20,
-            y: () => scrollingDown ? 20 : 0, // '20'- after scroll position move down || '0' = after scroll top back to its original position
-            ease: 'Power4.out',
+    function navAnimation(direction){
+        const scrollingDown = direction === 1;
+        const links = scrollingDown ? mainNavLinks : mainNavLinksRev;
+        return gsap.to(links, {
+            duration: 0.3, 
+            stagger: 0.05, 
+            autoAlpha: () => scrollingDown ? 0 : 1, 
+            y: () => scrollingDown ? 20 : 0,
+            ease: 'power4.out'
         });
     }
 
-    // hamburger move right after scrolled ==> 'has-scrolled'
-    // logo opacity 0 after scrolled ==> 'has-scrolled'
-    // Nav Links moves down after scrolling ==> 'onEnter: () => navAnimation()'
+    // updated trigger to #main instead of absolute 100
     ScrollTrigger.create({
-        start: 100,
+        trigger: '#main',
+        start: 'top top-=100',
         end: 'bottom bottom-=200',
         toggleClass: {
             targets: 'body',
             className: 'has-scrolled'
         },
-        onEnter: ({direction}) => navAnimation({direction}), // Scrolled down nav links go away
-        onLeaveBack: ({direction}) => navAnimation({direction}), // Scrolled at the top nav links appears/show
-        markers: false
-    })
-    
+        onEnter: ({direction}) => navAnimation(direction),
+        onLeaveBack: ({direction}) => navAnimation(direction),
+        // markers: true
+    });
+
 }
 
 // Header Animation
 function initHeaderTilt(){
     document.querySelector('header').addEventListener('mousemove', moveImages);
-
 }
 
 function moveImages(e){
@@ -297,6 +292,7 @@ function initPinSteps(){
         end: 'center center',
         pin: true,
         // markers: true
+        pinReparent: true
     });
 
     // get true hieght even sa mobile
@@ -334,8 +330,52 @@ function initPinSteps(){
 
 }
 
+let bodyScrollBar;
+
+
+function initScrollTo(){
+
+    // find all links and animate to the right position
+    gsap.utils.toArray('.fixed-nav a').forEach(link => {
+
+        const target = link.getAttribute('href');
+
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            // gsap.to(window, {duration: 1.5, scrollTo: target, ease: 'Power2.out'});
+            bodyScrollBar.scrollIntoView(document.querySelector(target), {damping: 0.07, offsetTop: 100})
+        });
+
+    });
+
+};
+
+function initSmoothScrollbar(){
+     
+    // Smooth Scrollbar
+    // Scrollbar.init(document.querySelector('#viewport'));
+    bodyScrollBar = Scrollbar.init(document.querySelector('#viewport'), {damping: 0.07});
+
+    // removehorizontal scrollbar
+    bodyScrollBar.track.xAxis.element.remove();
+
+    // keep ScrollTrigger in sync with Smooth Scrollbar
+    ScrollTrigger.scrollerProxy(document.body, {
+        scrollTop(value) {
+            if (arguments.length) {
+                bodyScrollBar.scrollTop = value; // setter
+            }
+            return bodyScrollBar.scrollTop;    // getter
+        }
+    });
+    
+    // when the smooth scroller updates, tell ScrollTrigger to update() too: 
+    bodyScrollBar.addListener(ScrollTrigger.update);
+}
+
 
 function init(){    
+    initSmoothScrollbar(); 
     // Calling the function to run
     initNavigation();
     initHeaderTilt();
