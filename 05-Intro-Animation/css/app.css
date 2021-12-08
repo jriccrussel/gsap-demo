@@ -298,7 +298,7 @@ header h1 span {
   top: 0;
   left: 0;
   width: 100%;
-  /* visibility: hidden; */
+  visibility: hidden;
   overflow: hidden;
 }
 .loader__mask {
@@ -369,6 +369,14 @@ header h1 span {
   height: 100%;
   position: absolute;
 }
+
+/* Pptimize Loader */
+.loader__title--mask {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
 
 /* =Main */
 main {

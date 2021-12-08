@@ -26,6 +26,7 @@ function initLoader(){
     const loaderContent = select('.loader__content');
 
     tlLoaderIn
+    .set([loader, loaderContent], {autoAlpha: 1})
     .from(loaderInner, {
         scaleY: 0,
         transformOrigin: 'bottom'
