@@ -3,6 +3,21 @@ gsap.registerPlugin(ScrollTrigger);
 const select = (e) => document.querySelector(e);
 const selectAll = (e) => document.querySelectorAll(e);
 
+const loader = select('.loader');
+const loaderInner = select('.loader .inner');
+const progressBar = select('.loader .progress');
+
+// show loader on page load
+gsap.set(loader, {autoAlpha: 1});
+
+// scalde loader down
+// sa first load ang 'loaderInner' na set to 'scaleY: 0.005'(mura height nya but sa css nya g transform translate)
+gsap.set(loaderInner, {scaleY: 0.005, transformOrigin: 'bottom'});
+
+// make a tween that scales the loader 
+// then ang progress bar(sa sulod mura dark blue) mo animate to the right
+gsap.to(progressBar, {scaleX: 0, ease: 'none', transformOrigin: 'right'});
+
 // Loader
 function initLoader(){
 
@@ -22,11 +37,10 @@ function initLoader(){
     const line1 = select('.loader__title--mask:nth-child(1) span'); // TItle 1
     const line2 = select('.loader__title--mask:nth-child(2) span'); // TItle 2
     const lines = selectAll('.loader__title--mask');
-    const loader = select('.loader');
     const loaderContent = select('.loader__content');
 
     tlLoaderIn
-    .set([loader, loaderContent], {autoAlpha: 1})
+    .set(loaderContent, {autoAlpha: 1})
     .from(loaderInner, {
         scaleY: 0,
         transformOrigin: 'bottom'
@@ -60,12 +74,12 @@ function initLoader(){
 
 }
 
-function init(){
+// function init(){
     
-    // start here
-    initLoader();
-}
+//     // start here
+//     initLoader();
+// }
 
-window.addEventListener('load', function(){
-    init();
-});
+// window.addEventListener('load', function(){
+//     init();
+// });
