@@ -373,8 +373,8 @@ function initSmoothScrollbar(){
     bodyScrollBar.addListener(ScrollTrigger.update);
 }
 
-
 function init(){    
+
     initSmoothScrollbar(); 
     // Calling the function to run
     initNavigation();
