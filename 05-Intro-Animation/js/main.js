@@ -74,12 +74,49 @@ function initLoader(){
 
 }
 
-function init(){
-    
-    // start here
-    initLoader();
+function pageTransitionIn(){
+    console.log('pageTransitionIn');
+    return gsap.to('.transition', {
+        duration: 1,
+        yPercent: -100,
+        ease: 'power1.inOut'
+    });
 }
 
-window.addEventListener('load', function(){
-    init();
-});
+function pageTransitionOut(){
+    console.log('pageTransitionOut');
+    return gsap.to('.transition', {
+        duration: 1,
+        yPercent: 0,
+        ease: 'power1.inOut'
+    });
+}
+
+function initPageTransition(){
+    barba.init({
+        transitions: [{
+            once(){
+                // initiate once on the initial page load
+                initLoader();
+            },
+            async leave(){
+                // animate loading screen in
+                await pageTransitionIn();
+            },
+            enter(){
+                // animate loadin screen out
+                pageTransitionOut();
+            }
+        }]
+    })
+}
+
+// function init(){
+    
+//     // start here
+//     initLoader();
+// }
+
+// window.addEventListener('load', function(){
+//     init();
+// });
