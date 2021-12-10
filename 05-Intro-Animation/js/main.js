@@ -93,7 +93,7 @@ function initLoader(){
     const tlLoaderOut = gsap.timeline({
         id: 'tlLoaderOut',
         defaults: {
-            duration: 1.2,
+            duration: 0.8,
             ease: 'power2.inOut'
         },
         delay: 1
@@ -114,31 +114,43 @@ function initLoader(){
 
 }
 
-function pageTransitionIn({el}){
+function pageTransitionIn({container}){
     console.log('pageTransitionIn');
     // timeline to stretch the loader over the whole screen
-    const tl = gsap.to('.transition', {
-        duration: 1.2,
-        yPercent: -100,
-        ease: 'power1.inOut'
+    // const tl = gsap.to('.transition', {
+    //     duration: 0.8,
+    //     yPercent: -100,
+    //     ease: 'power1.inOut'
+    // });
+    const tl = gsap.timeline({
+        defaults: {
+          duration: 0.8,
+          ease: 'power1.inOut'
+        }
     });
 
     tl.set(loaderInner, { autoAlpha: 0 })
     .fromTo(loader, { yPercent: -100 }, {yPercent: 0 })
-    fromTo(loaderMask, { yPercent: 80 }, {yPercent: 0 }, 0)
+    .fromTo(loaderMask, { yPercent: 80 }, {yPercent: 0 }, 0)
     .to(container,{y:150}, 0);
 
     return tl;
 }
 
-function pageTransitionOut({el}){
+function pageTransitionOut({container}){
     console.log('pageTransitionOut');
 
     // timeline to move loader out moving down
-    const tl = gsap.to('.transition', {
-        duration: 1.2,
-        yPercent: 0,
-        ease: 'power1.inOut'
+    // const tl = gsap.to('.transition', {
+    //     duration: 1.2,
+    //     yPercent: 0,
+    //     ease: 'power1.inOut'
+    // });
+    const tl = gsap.timeline({
+        defaults: {
+          duration: 0.8,
+          ease: 'power1.inOut'
+        }
     });
 
     tl.to(loader, { yPercent: 100 })
@@ -150,11 +162,12 @@ function pageTransitionOut({el}){
 
 function initPageTransitions(){
 
-    // do something before the transition starts
+    //Add the cursor loading class before the transition starts
     barba.hooks.before(() => {
         select('html').classList.add('is-transitioning');
     });
-    // do something after the transition finishes
+
+    // Remove the cursor loading class after the transition finishes
     barba.hooks.after(() => {
         select('html').classList.remove('is-transitioning');
     });
