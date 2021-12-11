@@ -51,6 +51,10 @@ body {
   background-color: var(--bcg-loaderblue);
 }
 
+.is-transitioning {
+  pointer-events: none;
+  cursor: progress;
+}
 
 /* =Top Nav */
 .logo {
@@ -434,7 +438,8 @@ header h1 span {
   align-items: center;
   width: 100%;
   height: 100%;
-  background-color: var(--bcg-loaderblue) url('../img/img_logo.svg') no-repeat center;
+  background: var(--bcg-loaderblue) url('../img/img_logo.svg') no-repeat center;
+  background-size: 155px 155px;
   overflow: hidden;
 }
 .loader .inner,
@@ -444,14 +449,14 @@ header h1 span {
 }
 .loader .inner {
   background-color: var(--bcg-loaderbluedark);
+  position: relative;
 }
 .loader__content {
-  z-index: 4;
+  z-index: 5;
   display: flex;
   justify-content: center;
   align-items: center;
   background: transparent;
-  visibility: hidden; /* hide loader content by default */
 }
 .loader__title {
   font-size: 7vw;
@@ -473,6 +478,16 @@ header h1 span {
   overflow: hidden;
   position: relative;
 }
+.loader__image img {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  object-fit: cover;
+  object-position: 50% 50%;
+  opacity: 0.8
+}
 .loader__title--mask {
   overflow: hidden;
 }
@@ -486,6 +501,12 @@ header h1 span {
   position: absolute;
 }
 
+/* Pptimize Loader */
+.loader__title--mask {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
 
 /* =Main */
 main {

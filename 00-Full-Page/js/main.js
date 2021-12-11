@@ -44,8 +44,8 @@ function initNavigation(){
         onLeaveBack: ({direction}) => navAnimation(direction),
         // markers: true
     });
-
 }
+// End Navigation Animation
 
 // Header Animation
 function initHeaderTilt(){
@@ -135,7 +135,10 @@ function initHoverReveal() {
 
     })
 }
+// END REVEAL GALLERY
 
+
+// HOVER REVEAL
 function getTextHeight(elem){
     return elem.clientHeight;
 }
@@ -175,6 +178,8 @@ function createHoverReveal(e){
 
     return tl;
 }
+// END HOVER REVEAL
+
 
 // PORTFOLIO
 const allLinks = gsap.utils.toArray('.portfolio__categories a');
@@ -281,6 +286,7 @@ function initImageParallax(){
 
     });
 }
+// END PARALLAX
 
 // PIN NAVIGATION
 function initPinSteps(){
@@ -329,10 +335,11 @@ function initPinSteps(){
     });
 
 }
+// END PIN NAVIGATION
 
 let bodyScrollBar;
 
-
+// SCROLL TO
 function initScrollTo(){
 
     // find all links and animate to the right position
@@ -343,13 +350,19 @@ function initScrollTo(){
         link.addEventListener('click', (e) => {
             e.preventDefault();
             // gsap.to(window, {duration: 1.5, scrollTo: target, ease: 'Power2.out'});
-            bodyScrollBar.scrollIntoView(document.querySelector(target), {damping: 0.07, offsetTop: 100})
+            console.log(select(target));
+            bodyScrollBar.scrollIntoView(document.querySelector(target), {
+                damping: 0.07, 
+                offsetTop: 100
+            })
         });
 
     });
 
 };
+// END SCROLL TO
 
+// SMOOTH SCROLLING
 function initSmoothScrollbar(){
      
     // Smooth Scrollbar
@@ -372,9 +385,209 @@ function initSmoothScrollbar(){
     // when the smooth scroller updates, tell ScrollTrigger to update() too: 
     bodyScrollBar.addListener(ScrollTrigger.update);
 }
+// END SMOOTH SCROLLING
 
-function init(){    
+// function init(){    
 
+//     initSmoothScrollbar(); 
+//     // Calling the function to run
+//     initNavigation();
+//     initHeaderTilt();
+
+//     // HOVER REVEAL
+//     initHoverReveal();
+
+//     // PORTFOLIO
+//     initPortfolioHover();
+
+//     // PARALLAX
+//     initImageParallax();
+//     initPinSteps();
+// }
+
+// window.addEventListener('load', function(){
+//     init(); 
+// });
+
+// LOADER MAIN
+const select = (e) => document.querySelector(e);
+const selectAll = (e) => document.querySelectorAll(e);
+
+const loader = select('.loader');
+const loaderInner = select('.loader .inner');
+const progressBar = select('.loader .progress');
+const loaderMask = select('.loader__mask');
+
+function init(){
+    gsap.set(loader, {autoAlpha: 1});
+
+    gsap.set(loaderInner, {scaleY: 0.005, transformOrigin: 'bottom'});
+
+    const progressTween = gsap.to(progressBar, {
+        paused: true, 
+        scaleX: 0, 
+        ease: 'none', 
+        transformOrigin: 'right'
+    });
+
+    let loadedImageCount = 0, imageCount;
+    const container = select('#main');
+
+    const imgLoad = imagesLoaded( container );
+    imageCount = imgLoad.images.length;
+
+    updateProgress(0);
+
+    imgLoad.on( 'progress', function() {
+        
+        loadedImageCount++;
+        updateProgress( loadedImageCount );
+    });
+
+    function updateProgress( value ) { 
+        
+        gsap.to(progressTween, {
+            progress: value/imageCount,
+            duration: 0.3,
+            ease: 'power1.out'
+        })
+    }
+
+    imgLoad.on( 'done', function( instance ) {
+        gsap.set(progressBar, {
+            autoAlpha: 0,
+            onComplete: initPageTransitions
+        });
+    });
+}
+
+init();
+
+// Loader
+function initLoader(){
+
+    const tlLoaderIn = gsap.timeline({
+        id: 'tlLoaderIn',
+        defaults: {
+            duration: 1.1,
+            ease: 'power2.out'
+        },
+        // onComplete: () => select('body').classList.remove('is-loading')
+        onComplete: () => initContent()
+    });
+
+    const loaderInner = select('.loader .inner');
+    const image = select('.loader__image img');
+    const mask = select('.loader__image--mask');
+    const line1 = select('.loader__title--mask:nth-child(1) span');
+    const line2 = select('.loader__title--mask:nth-child(2) span'); 
+    const lines = selectAll('.loader__title--mask');
+    const loaderContent = select('.loader__content');
+
+    tlLoaderIn
+    .set(loaderContent, {autoAlpha: 1})
+    .from(loaderInner, {
+        scaleY: 0,
+        transformOrigin: 'bottom'
+    }).addLabel('revealImage')
+    .from(mask, {yPercent: 100}, 'revealImage-=0.6')  
+    .from(image, {yPercent: 100}, 'revealImage-=0.6')
+    .from([line1, line2], {yPercent: 100, stagger: 0.1}, 'revealImage-=0.4');
+
+    // Loader Animate Out
+    const tlLoaderOut = gsap.timeline({
+        id: 'tlLoaderOut',
+        defaults: {
+            duration: 0.8,
+            ease: 'power2.inOut'
+        },
+        delay: 1
+    })
+
+    tlLoaderOut
+    .to(lines, {yPercent: -500, stagger: 0.2}, 0)
+    .to([loader, loaderContent], {yPercent: -100}, 0.2)
+    .from('#main', {y: 150}, 0.2);
+
+    const tlLoader = gsap.timeline();
+
+    tlLoader
+    .add(tlLoaderIn)
+    .add(tlLoaderOut);
+}
+
+function pageTransitionIn({container}){
+    console.log('pageTransitionIn');
+    
+    const tl = gsap.timeline({
+        defaults: {
+          duration: 0.8,
+          ease: 'power1.inOut'
+        }
+    });
+
+    tl.set(loaderInner, { autoAlpha: 0 })
+    .fromTo(loader, { yPercent: -100 }, {yPercent: 0 })
+    .fromTo(loaderMask, { yPercent: 80 }, {yPercent: 0 }, 0)
+    .to(container,{y:150}, 0);
+
+    return tl;
+}
+
+function pageTransitionOut({container}){
+    console.log('pageTransitionOut');
+    
+    const tl = gsap.timeline({
+        defaults: {
+          duration: 0.8,
+          ease: 'power1.inOut'
+        },
+        onComplete: () => initContent()
+    });
+
+    tl.to(loader, { yPercent: 100 })
+    .to(loaderMask, { yPercent: -80 }, 0)
+    .from(container,{y:-150}, 0);
+
+    return tl;
+}
+
+function initPageTransitions(){
+
+    barba.hooks.before(() => {
+        select('html').classList.add('is-transitioning');
+    });
+
+    barba.hooks.after(() => {
+        select('html').classList.remove('is-transitioning');
+    });
+
+    barba.hooks.enter(() => {
+        window.scrollTo(0, 0);
+    });
+
+    barba.init({
+        transitions: [{
+            once() {
+                initLoader();
+            },
+            async leave({current}) {
+                await pageTransitionIn(current);
+                console.log(current);
+            },
+            enter({next}) {
+                pageTransitionOut(next);
+                console.log(next);
+            }
+        }]
+    });
+}
+// END LOADER MAIN
+
+
+function initContent(){
+
+    select('body').classList.remove('is-loading');
     initSmoothScrollbar(); 
     // Calling the function to run
     initNavigation();
@@ -389,8 +602,5 @@ function init(){
     // PARALLAX
     initImageParallax();
     initPinSteps();
+    initScrollTo();
 }
-
-window.addEventListener('load', function(){
-    init(); 
-});
